@@ -1,11 +1,19 @@
 import Footer from "../../components/Footer";
 import Nav from "../../components/Nav";
+import { useState } from "react";
+function Home() {
+  const [loggedIn, setLoggedIn] = useState(() => {
+    return !!localStorage.getItem("token");
+  });
 
-function Home({ userId }) {
+  function logOut() {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+  }
   return (
     <>
-      <Nav />
-      <h1>Hello From Home {userId}</h1>
+      <Nav loggedIn={loggedIn} logOut={logOut} />
+      <h1>Posts will be displayed here</h1>
       <Footer />
     </>
   );

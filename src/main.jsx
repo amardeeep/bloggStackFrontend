@@ -4,15 +4,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
-function checkForUser() {
-  const userId = localStorage.getItem("userId");
-  return userId ? userId : null;
-}
-const user = checkForUser();
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home userId={user} />,
+    element: <Home />,
   },
   {
     path: "/login",

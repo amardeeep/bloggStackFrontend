@@ -1,10 +1,10 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 export default function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
 
   function handleChange(e) {
     //destructure name and value from e.target
@@ -13,8 +13,8 @@ export default function Login() {
   }
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(JSON.stringify(formData));
     setLoading(true);
+    setError(null);
     fetch("http://localhost:3000/login", {
       method: "post",
       headers: {
@@ -29,12 +29,14 @@ export default function Login() {
         return response.json();
       })
       .then((response) => {
-        setData(response);
-        console.log(data);
+        console.log("Success!");
+        localStorage.setItem("token", response.token);
+        navigate("/");
       })
-      .catch((error) => setError(error))
+      .catch((error) => {
+        setError(error);
+      })
       .finally(setLoading(false));
-    //submit login credentials, if login fails return error else navigate to homepage, create token and store it in localstorage
   }
   return (
     <>
@@ -46,6 +48,7 @@ export default function Login() {
           id="email"
           onChange={handleChange}
           value={formData.email}
+          required
         />
         <label htmlFor="password">Passowrd :</label>
         <input
@@ -54,11 +57,12 @@ export default function Login() {
           id="passowrd"
           onChange={handleChange}
           value={formData.password}
+          required
         />
         <button type="submit" onClick={handleSubmit} disabled={loading}>
           Log In
         </button>
-        {error && <p>Error {error.message}</p>}
+        {error && <p>Error {error.status}</p>}
       </form>
     </>
   );
