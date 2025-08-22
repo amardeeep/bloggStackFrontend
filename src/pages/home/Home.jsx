@@ -19,16 +19,15 @@ function Home() {
   const [loggedIn, setLoggedIn] = useState(() => {
     return !!localStorage.getItem("token");
   });
-  const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [posts, setPosts] = useState(null);
   useEffect(() => {
     setLoading(true);
+    setPosts(null);
     fetch("http://localhost:3000/posts", {
       method: "get",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-type": "application/json",
       },
     })
@@ -44,7 +43,7 @@ function Home() {
       })
       .catch((error) => setError(error))
       .finally(setLoading(false));
-  }, [token]);
+  }, []);
   function logOut() {
     localStorage.removeItem("token");
     setLoggedIn(false);
