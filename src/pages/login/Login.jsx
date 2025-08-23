@@ -5,7 +5,6 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   function handleChange(e) {
     //destructure name and value from e.target
     const { name, value } = e.target;
@@ -30,7 +29,9 @@ export default function Login() {
       })
       .then((response) => {
         console.log("Success!");
+        console.log(JSON.stringify(response.data));
         localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.data));
         navigate("/");
       })
       .catch((error) => {

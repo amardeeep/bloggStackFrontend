@@ -7,6 +7,7 @@ export default function Posts() {
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [popNewCommentForm, setPopNewCommentForm] = useState(false);
   const [loadingNewComment, setLoadingNewComment] = useState(false);
   const [errorNewComment, setErrorNewComment] = useState(null);
@@ -43,6 +44,7 @@ export default function Posts() {
       })
       .then((response) => {
         console.log(response.data);
+        setRefreshTrigger((prev) => prev + 1);
       })
       .catch((error) => setErrorNewComment(error))
       .finally(setLoadingNewComment(false), setPopNewCommentForm(false));
@@ -54,11 +56,15 @@ export default function Posts() {
   function Comment({ comment }) {
     return (
       <>
-        <li key={comment.id}>{comment.body}</li>
+        <li key={comment.id}>
+          <h4>{comment.body}</h4>
+          <h5>{comment.user.fullName}</h5>
+        </li>
       </>
     );
   }
   useEffect(() => {
+    console.log("ran effect");
     setLoading(true);
     fetch(`http://localhost:3000/posts/${id}`, {
       method: "get",
@@ -80,7 +86,7 @@ export default function Posts() {
         setError(error);
       })
       .finally(setLoading(false));
-  }, [id]);
+  }, [id, refreshTrigger]);
   return (
     <div className="postPage">
       {loading && <h1>Loading Post ...</h1>}
