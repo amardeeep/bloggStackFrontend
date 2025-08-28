@@ -9,7 +9,6 @@ export default function Signup() {
     password: "",
     fullName: "",
   });
-  const [serverResponse, setServerResponse] = useState(null);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => {
@@ -35,8 +34,7 @@ export default function Signup() {
         }
         return response.json();
       })
-      .then((response) => {
-        setServerResponse(response);
+      .then(() => {
         console.log(`User created Succesfully`);
         navigate("/login");
       })
@@ -75,9 +73,8 @@ export default function Signup() {
         <button type="submit" disabled={loading}>
           Signup
         </button>
+        {/*handle error and validate formData before sending request  */}
         {error && <p>Error :{error.message}</p>}
-        <p>{JSON.stringify(formData)}</p>
-        <p>{JSON.stringify(serverResponse)}</p>
       </form>
     </>
   );

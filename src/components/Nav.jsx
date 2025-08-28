@@ -1,29 +1,25 @@
 import { useNavigate } from "react-router-dom";
-export default function Nav({ loggedIn, logOut }) {
+import { AuthContext } from "../../AuthContext";
+import { useContext } from "react";
+export default function Nav() {
   const navigate = useNavigate();
-  const user = localStorage.getItem("user");
-  let parsed = null;
-  try {
-    parsed = JSON.parse(user);
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const { isLoggedIn, user, logout } = useContext(AuthContext);
   function handleLoginButton(e) {
     e.preventDefault();
     navigate("/login");
   }
   function handleLogoutButton(e) {
     e.preventDefault();
-    logOut();
+    logout();
   }
   return (
     <nav>
       <h2>BloggStack</h2>
       <div className="rightContainer">
-        {loggedIn && <h2>Welcome Back {parsed.fullName}</h2>}
-        {loggedIn && <button onClick={handleLogoutButton}>Log Out</button>}
-        {loggedIn && <button>Profile</button>}
-        {!loggedIn && <button onClick={handleLoginButton}>Log In</button>}
+        {isLoggedIn && <h2>Welcome Back {user.fullName}</h2>}
+        {isLoggedIn && <button onClick={handleLogoutButton}>Log Out</button>}
+        {isLoggedIn && <button>Profile</button>}
+        {!isLoggedIn && <button onClick={handleLoginButton}>Log In</button>}
       </div>
     </nav>
   );

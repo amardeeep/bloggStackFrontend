@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Nav from "../../components/Nav";
 export default function Posts() {
   const { id } = useParams();
   const token = localStorage.getItem("token");
@@ -47,7 +48,11 @@ export default function Posts() {
         setRefreshTrigger((prev) => prev + 1);
       })
       .catch((error) => setErrorNewComment(error))
-      .finally(setLoadingNewComment(false), setPopNewCommentForm(false));
+      .finally(
+        setLoadingNewComment(false),
+        setPopNewCommentForm(false),
+        setNewCommentBody("")
+      );
   }
   function handleNewCommentChange(e) {
     const value = e.target.value;
@@ -64,7 +69,6 @@ export default function Posts() {
     );
   }
   useEffect(() => {
-    console.log("ran effect");
     setLoading(true);
     fetch(`http://localhost:3000/posts/${id}`, {
       method: "get",
@@ -93,6 +97,7 @@ export default function Posts() {
       {error && <h1>{error}</h1>}
       {post && (
         <>
+          <Nav></Nav>
           <button onClick={handleClick}>Go Back To Home</button>
           <h1>{post.title}</h1>
           <p>{post.content}</p>

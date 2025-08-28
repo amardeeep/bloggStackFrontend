@@ -16,12 +16,10 @@ function PostBlock({ post }) {
   );
 }
 function Home() {
-  const [loggedIn, setLoggedIn] = useState(() => {
-    return !!localStorage.getItem("token");
-  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [posts, setPosts] = useState(null);
+  //fetch all posts and render them on homepage
   useEffect(() => {
     setLoading(true);
     setPosts(null);
@@ -38,19 +36,15 @@ function Home() {
         return response.json();
       })
       .then((response) => {
-        console.log(response.data);
         setPosts(response.data);
       })
       .catch((error) => setError(error))
       .finally(setLoading(false));
   }, []);
-  function logOut() {
-    localStorage.removeItem("token");
-    setLoggedIn(false);
-  }
+
   return (
     <>
-      <Nav loggedIn={loggedIn} logOut={logOut} />
+      <Nav />
       <h1>Posts will be displayed here</h1>
       {loading && <h2>Loading Posts ...</h2>}
       {error && <h2>{error.message}</h2>}
