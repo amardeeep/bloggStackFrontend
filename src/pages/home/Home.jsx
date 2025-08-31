@@ -12,6 +12,7 @@ function PostBlock({ post }) {
       <h2>{post.title}</h2>
       <p>{post.content}</p>
       <h4>{post.author.fullName}</h4>
+      <h5>{post.createdAt}</h5>
     </div>
   );
 }

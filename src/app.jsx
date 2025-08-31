@@ -3,6 +3,7 @@ import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Posts from "./pages/posts/Posts";
 import Profile from "./pages/profile/Profile";
+import Admin from "./pages/admin/Admin";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import useAuth from "../hooks/useAuth";
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
     path: "/profile",
     element: <Profile />,
   },
+  { path: "/admin", element: <Admin /> },
 ]);
 
 export default function App() {

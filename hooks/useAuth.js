@@ -3,6 +3,7 @@ function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState(null);
   //async login function that throws error on failed login and returns data on succesful login
   async function login(email, password) {
@@ -21,6 +22,9 @@ function useAuth() {
       }
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      if (data.data.role === "ADMIN") {
+        setIsAdmin(true);
+      }
       setIsLoggedIn(true);
       setUser(data.data);
       return data;
@@ -36,6 +40,6 @@ function useAuth() {
     localStorage.removeItem("token");
     setUser(null);
   }
-  return { isLoggedIn, user, loginError, login, logout, loading };
+  return { isLoggedIn, isAdmin, user, loginError, login, logout, loading };
 }
 export default useAuth;

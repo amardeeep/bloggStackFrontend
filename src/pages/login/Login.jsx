@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../../AuthContext";
 import { useContext } from "react";
 export default function Login() {
@@ -22,6 +22,9 @@ export default function Login() {
   }
   return (
     <>
+      <h2>
+        Don't have an account? Sign up <Link to={"/signup"}>here.</Link>
+      </h2>
       <form>
         <label htmlFor="email">User Name :</label>
         <input
@@ -31,6 +34,7 @@ export default function Login() {
           onChange={handleChange}
           value={formData.email}
           required
+          placeholder="your@email.com"
         />
         <label htmlFor="password">Passowrd :</label>
         <input
@@ -39,6 +43,7 @@ export default function Login() {
           id="passowrd"
           onChange={handleChange}
           value={formData.password}
+          placeholder="Enter Your Password"
           required
         />
         <button type="submit" onClick={handleSubmit} disabled={loading}>

@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Nav from "../../components/Nav";
+import { AuthContext } from "../../../AuthContext";
+import { useContext } from "react";
 export default function Posts() {
   const { id } = useParams();
+  const { isLoggedIn } = useContext(AuthContext);
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState(null);
@@ -19,9 +22,15 @@ export default function Posts() {
   }
   function handlePopForm() {
     setPopNewCommentForm((prevValue) => !prevValue);
+    setErrorNewComment(null);
   }
+
   function handleNewComment(e) {
     e.preventDefault();
+    if (newCommentBody === "") {
+      setErrorNewComment("Empty comments not allowed.");
+      return;
+    }
     setLoadingNewComment(true);
     fetch(`http://localhost:3000/comments/`, {
       method: "post",
@@ -105,7 +114,9 @@ export default function Posts() {
           <ul>
             <h3>
               Top Comments :
-              {token && <button onClick={handlePopForm}>New Comment</button>}
+              {isLoggedIn && (
+                <button onClick={handlePopForm}>New Comment</button>
+              )}
             </h3>
             {popNewCommentForm && (
               <form>
@@ -117,9 +128,12 @@ export default function Posts() {
                   onChange={handleNewCommentChange}
                   required
                 />
-                {errorNewComment && <p>{error.message}</p>}
+                {errorNewComment && <p>{errorNewComment}</p>}
                 <button onClick={handleNewComment} disabled={loadingNewComment}>
                   Create
+                </button>
+                <button onClick={() => setPopNewCommentForm(false)}>
+                  Cancel
                 </button>
               </form>
             )}

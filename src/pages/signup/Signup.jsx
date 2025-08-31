@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 export default function Signup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -9,6 +9,7 @@ export default function Signup() {
     password: "",
     fullName: "",
   });
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => {
@@ -20,6 +21,10 @@ export default function Signup() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    //form validation goes here
+    if (confirmPasswordValue !== formData.password) {
+      throw new Error("Confirm Password should be same as passowrd");
+    }
     setLoading(true);
     fetch("http://localhost:3000/signup", {
       method: "post",
@@ -45,14 +50,18 @@ export default function Signup() {
   };
   return (
     <>
+      <h2>
+        Already have an account? Sign in <Link to={"/login"}>here</Link>{" "}
+      </h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">User Name (use Your email)</label>
+        <label htmlFor="email">User Name </label>
         <input
           type="email"
           name="email"
           id="email"
           value={formData.email}
           onChange={handleChange}
+          placeholder="your@email.com"
         />
         <label htmlFor="fullName">Full Name</label>
         <input
@@ -61,6 +70,7 @@ export default function Signup() {
           id="fullName"
           value={formData.fullName}
           onChange={handleChange}
+          placeholder="Jhon Doe"
         />
         <label htmlFor="password">Password</label>
         <input
@@ -69,6 +79,18 @@ export default function Signup() {
           id="password"
           value={formData.password}
           onChange={handleChange}
+          placeholder="Enter Your Password"
+        />
+        <label htmlFor="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          placeholder="Confirm You Password"
+          onChange={(e) => {
+            setConfirmPasswordValue(e.target.value);
+          }}
+          value={confirmPasswordValue}
         />
         <button type="submit" disabled={loading}>
           Signup
